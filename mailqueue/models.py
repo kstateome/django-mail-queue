@@ -19,6 +19,8 @@ from django.conf import settings
 
 from . import defaults
 
+from django.core.files.storage import FileSystemStorage
+fs = FileSystemStorage(location='/tmp')
 
 class MailerMessageManager(models.Manager):
     def send_queued(self, limit=None):
@@ -97,7 +99,7 @@ class MailerMessage(models.Model):
 
 
 class Attachment(models.Model):
-    file_attachment = models.FileField(upload_to='mail-queue/attachments', blank=True, null=True)
+    file_attachment = models.FileField(upload_to='/tmp', blank=True, null=True, storage=fs)
     email = models.ForeignKey(MailerMessage, blank=True, null=True)
 
     def __unicode__(self):
